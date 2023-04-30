@@ -11,6 +11,7 @@ import com.roky.thunderspi.repositories.PostRepo;
 import com.roky.thunderspi.repositories.UserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -78,7 +79,8 @@ public class BlogPostServiceImpl implements IBlogPostService {
 			likeRepo.save(lk);
 		} else if (like == null && dislike != null) {
 			likeRepo.save(lk);
-			dislikeRepo.delete(dislike);
+			publication.getLikes().remove(lk);
+			postRepo.save(publication);
 		} else {
 			likeRepo.delete(like);
 		}
@@ -97,7 +99,8 @@ public class BlogPostServiceImpl implements IBlogPostService {
 			dislikeRepo.save(lk);
 		} else if (dislike == null && like != null) {
 			dislikeRepo.save(lk);
-			likeRepo.delete(like);
+			publication.getDislikes().remove(lk);
+			postRepo.save(publication);
 		} else {
 			likeRepo.delete(like);
 		}
