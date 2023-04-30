@@ -9,8 +9,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+
 import java.time.Instant;
 import java.util.*;
 
@@ -28,24 +27,20 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @NotBlank
-    @Column
     private String title;
 
-    @Lob // it means data can take up a lot of space
-    @Column
-    @NotEmpty
+
     private String content;
 
 
     private String image;
     @JsonIgnore
 
-    @Column
+
     private Instant created_At;
     @JsonIgnore
 
-    @Column
+
     private Instant updated_At;
 
     @JsonIgnore
@@ -55,17 +50,6 @@ public class Post {
     @ManyToOne
     private User user;
 
-    @Column
-    @NotBlank
-    private String userName;
-
-    /* @OneToMany(mappedBy = "postcom")
-     private List<Comment> comments = new ArrayList<Comment>();
-
-     public List<Comment> getComments() {
-         return comments;
-     }
- */
     @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
     @JsonIgnore
     Set<Comment> comment;
@@ -78,9 +62,4 @@ public class Post {
     @JsonIgnore
     Set<PostDislike> dislikes;
 
-   /* @JsonBackReference
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JsonIgnore
-    Comment comment;
-*/
 }

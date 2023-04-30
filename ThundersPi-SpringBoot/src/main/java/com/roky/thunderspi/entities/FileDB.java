@@ -53,9 +53,6 @@ public class FileDB implements Serializable {
   private byte[] data;
   
   
-  @OneToOne(mappedBy="files")
-  @JsonIgnore
-  private User user;
   
   @OneToOne(mappedBy="files")
   @JsonBackReference 
