@@ -13,11 +13,15 @@ public interface IBlogPostService {
     List<Post> findAllPosts();
     PostDto readSinglePost(Long postId);
     Post getSinglePost(Long postId);
-
     Post findPostsById(Long postId);
     Post addPost(Post post);
     Post editPost(Post post);
     void deletePost(Long postId);
+    
+	public void addLike(Long postId, Long idUser);
+	public void addDislike(Long postId, Long idUser);
+	public int nbrLikeByPub(Long postId);
+	public int nbrDisLikeByPub(Long postId);
 
 
 }

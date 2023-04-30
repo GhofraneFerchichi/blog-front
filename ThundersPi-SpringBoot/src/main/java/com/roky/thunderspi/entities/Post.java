@@ -69,6 +69,14 @@ public class Post {
     @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
     @JsonIgnore
     Set<Comment> comment;
+    
+    @OneToMany(mappedBy = "postlike",cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    Set<PostLike> likes;
+    
+    @OneToMany(mappedBy = "postdislike",cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    Set<PostDislike> dislikes;
 
    /* @JsonBackReference
     @ManyToOne(cascade = CascadeType.PERSIST)

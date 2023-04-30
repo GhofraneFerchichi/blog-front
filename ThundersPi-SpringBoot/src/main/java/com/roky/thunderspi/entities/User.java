@@ -2,8 +2,12 @@ package com.roky.thunderspi.entities;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.context.annotation.Lazy;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -78,7 +82,15 @@ public class User {
         }
     }
 
-
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="utilis")
+	@JsonIgnore
+	private Set<PostLike> Likes;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="utilis")
+	@JsonIgnore
+		private Set<PostDislike> dislikes;
+	
+	
 
 
 

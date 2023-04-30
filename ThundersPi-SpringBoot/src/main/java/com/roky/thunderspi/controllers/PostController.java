@@ -8,6 +8,7 @@ import com.roky.thunderspi.repositories.*;
 import com.roky.thunderspi.services.BlogPostServiceImpl;
 import com.roky.thunderspi.services.ILibElementService;
 import com.roky.thunderspi.services.LibFileServiceImpl;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -111,6 +112,31 @@ public class PostController {
     }
 
 
+	@PutMapping("/addLike/{idPublicaiton}/{idUser}")
+	public void addLike(@PathVariable("idPublicaiton") Long idPublicaiton, @PathVariable("idUser") Long idUser) {
+		postService.addLike(idPublicaiton, idUser);
+	}
+
+
+	@PutMapping("/addDislike/{idPublicaiton}/{idUser}")
+	public void addDislike(@PathVariable("idPublicaiton") Long idPublicaiton, @PathVariable("idUser") Long idUser) {
+		postService.addDislike(idPublicaiton, idUser);
+	}
+
+
+
+	@GetMapping("/nbrLike/{idPublicaiton}")
+	public int NbrLikes(@PathVariable("idPublicaiton") Long idPublicaiton) {
+		return postService.nbrLikeByPub(idPublicaiton);
+
+	}
+
+	
+	@GetMapping("/nbrDisLike/{idPublicaiton}")
+	public int NbrDisLikes(@PathVariable("idPublicaiton") Long idPublicaiton) {
+		return postService.nbrDisLikeByPub(idPublicaiton);
+
+	}
 
 
 
