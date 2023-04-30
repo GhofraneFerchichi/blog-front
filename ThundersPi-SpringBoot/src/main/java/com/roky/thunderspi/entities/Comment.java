@@ -22,7 +22,6 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String content;
-    Long idFile;
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore

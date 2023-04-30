@@ -11,7 +11,7 @@ import com.roky.thunderspi.entities.PostDislike;
 
 @Repository
 public interface DislikeRepository extends JpaRepository<PostDislike,Long> {
-	@Query("SELECT l from PostDislike l where l.utilis.userId= :userId  AND l.postdislike.postId= :idPublication"
+	@Query("SELECT l from PostDislike l where l.utilis.id= :userId  AND l.postdislike.postId= :idPublication"
 			)
 	PostDislike GetDislike(@Param("userId") Long idUser,@Param("idPublication") Long idPub) ;
 

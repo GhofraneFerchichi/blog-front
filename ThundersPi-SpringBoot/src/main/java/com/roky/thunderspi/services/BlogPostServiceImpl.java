@@ -1,13 +1,10 @@
 package com.roky.thunderspi.services;
 
-import com.roky.thunderspi.dto.PostDto;
-import com.roky.thunderspi.entities.Course;
 import com.roky.thunderspi.entities.Post;
 import com.roky.thunderspi.entities.PostDislike;
 import com.roky.thunderspi.entities.PostLike;
 import com.roky.thunderspi.entities.User;
 import com.roky.thunderspi.exception.PostNotFoundException;
-import com.roky.thunderspi.repositories.CourseRepo;
 import com.roky.thunderspi.repositories.DislikeRepository;
 import com.roky.thunderspi.repositories.LikeRepository;
 import com.roky.thunderspi.repositories.PostRepo;
@@ -36,25 +33,13 @@ public class BlogPostServiceImpl implements IBlogPostService {
 	@Autowired
 	UserRepo utiRepo;
 
-	@Autowired
-	private AuthenticationService authenticationService;
 
 	@Override
 	public List<Post> findAllPosts() {
 		return postRepo.findAll();
 	}
 
-	@Override
-	public PostDto readSinglePost(Long id) {
-		return null;
-	}
-
-	@Override
-	public Post getSinglePost(Long id) {
-		Post post = postRepo.findById(id).orElseThrow(() -> new PostNotFoundException("For id" + id));
-
-		return post;
-	}
+	
 
 	@Override
 	public Post findPostsById(Long postId) {
@@ -67,8 +52,10 @@ public class BlogPostServiceImpl implements IBlogPostService {
 	}
 
 	@Override
-	public Post editPost(Post post) {
-		return postRepo.save(post);
+	public Post editPost(Post post,Long postid) {
+		Post p = postRepo.findById(postid).orElse(null);
+		p.setContent(post.getContent());
+		return postRepo.save(p);
 	}
 
 	@Override

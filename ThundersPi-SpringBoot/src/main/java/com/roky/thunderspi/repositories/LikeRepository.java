@@ -11,7 +11,7 @@ import com.roky.thunderspi.entities.PostLike;
 
 @Repository
 public interface LikeRepository extends JpaRepository<PostLike,Long> {
-	@Query("SELECT l from PostLike l where l.utilis.userId= :userId  AND l.postlike.postId= :idPublication"
+	@Query("SELECT l from PostLike l where l.utilis.id= :userId  AND l.postlike.postId= :idPublication"
 			)
 	PostLike GetLike(@Param("userId") Long idUser,@Param("idPublication") Long idPub) ;
 

@@ -1,6 +1,6 @@
 package com.roky.thunderspi.controllers;
 
-import com.roky.thunderspi.dto.PostDto;
+
 import com.roky.thunderspi.entities.*;
 import com.roky.thunderspi.message.ResponseMessage;
 import com.roky.thunderspi.repositories.*;
@@ -24,9 +24,6 @@ import java.util.Set;
 @RequestMapping("/api/comment")
 public class CommentController {
 
-    private CommentServiceImpl commentaireService;
-    private IBlogPostService iBlogPostService;
-    private UserServiceImpl userService;
 
     @Autowired
     PostRepo postRepo;
@@ -34,62 +31,41 @@ public class CommentController {
     CommentRepo commentRepo;
     @Autowired
     UserRepo userRepo;
-
-    private ILibElementService iLibElementService;
-    private LibFileServiceImpl libFileService;
     @Autowired
-    LibElementRepo libElementRepo;
+    CommentServiceImpl cmtservice;
 
-    @Autowired
-    LibFileRepository libFileRepository;
 
-    @PostMapping("/addPost/{iduser}/{idsc}")
-    public ResponseEntity<?> addCourse( Comment comment, @PathVariable Long iduser, @PathVariable Long idsc) {
-        String message = "";
-        try {
-            User user = userRepo.findById(iduser).orElse(null);
-            Post post = postRepo.findById(idsc).orElse(null);
-            comment.setPost(post);
-            comment.setUser(user);
 
-            commentRepo.save(comment);
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
-        }
+    @PostMapping("/addcmt/{idpost}/{iduser}")
+    public Comment addCommentaire(@RequestBody Comment comment, @PathVariable("idpost") Long post, @PathVariable("iduser") Long user) {
+    	return cmtservice.addComment(comment, post, user);
     }
 
 
 
-    @GetMapping("/getall")
+    @GetMapping("/getallcmt")
     @ResponseBody
     public List<Comment> getAll() {
-        List<Comment> comments = commentaireService.retrieveAllCommentaires();
-        return comments;
-    }
-    @PostMapping("/add/{postId}")
 
-    public ResponseEntity<Comment> addComment(@RequestBody Comment c, @PathVariable Long postId) {
-        Comment comment = commentaireService.addPost(c, postId);
-        return new ResponseEntity<>(comment, HttpStatus.CREATED);
+        return cmtservice.retrieveAllCommentaires();
     }
 
     @GetMapping("/retrieve-commentaire/{commentaire-id}")
     @ResponseBody
     public Comment retrieveCommentaire(@PathVariable("commentaire-id") Long commentaireId) {
-        return commentaireService.retrieveCommentaire(commentaireId);
+        return cmtservice.retrieveCommentaire(commentaireId);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Comment> updateComment(@RequestBody Comment c) {
-        Comment updateComment = commentaireService.updateCommentaire(c);
-        return new ResponseEntity<>(updateComment, HttpStatus.OK);
+    @PutMapping("/update-cmt/{commentaire-id}")
+    public Comment updateComment(@RequestBody Comment c,@PathVariable("commentaire-id") Long commentaireId) {
+
+        return cmtservice.updateCommentaire(c, commentaireId);
     }
     // http://localhost:8081/remove-commentaire/{commentaire-id}
-    @DeleteMapping("/remove-client/{commentaire-id}")
+    @DeleteMapping("/remove-cmt/{commentaire-id}")
     @ResponseBody
     public void removeCommentaire(@PathVariable("commentaire-id") Long commentaireId) {
-        commentaireService.deleteCommentaire(commentaireId);
+    	cmtservice.deleteCommentaire(commentaireId);
     }
 
     // http://localhost:8081/modify-commentaire

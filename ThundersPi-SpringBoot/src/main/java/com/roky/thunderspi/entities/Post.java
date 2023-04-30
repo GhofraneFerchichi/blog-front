@@ -2,6 +2,8 @@ package com.roky.thunderspi.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -47,11 +49,9 @@ public class Post {
     private Instant updated_At;
 
     @JsonIgnore
-    @Column(nullable = true)
-    private Date deleted_at;
-    Long idFile;
-    String fileType;
-    String fileName;
+	  @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	  @JsonManagedReference
+	  private FileDB files;
     @ManyToOne
     private User user;
 

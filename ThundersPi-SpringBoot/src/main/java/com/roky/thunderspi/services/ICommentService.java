@@ -1,6 +1,6 @@
 package com.roky.thunderspi.services;
 
-import com.roky.thunderspi.entities.CategoryProduct;
+
 import com.roky.thunderspi.entities.Post;
 import com.roky.thunderspi.entities.Comment;
 
@@ -9,12 +9,10 @@ import java.util.List;
 public interface ICommentService {
 
     List<Comment> retrieveAllCommentaires();
-
-    Comment addPost(Comment c,Long postId);
-    public Comment addComment(Comment comment);
+    public Comment addComment(Comment comment,Long postId,Long iduser);
 
 
     void deleteCommentaire(Long id);
-    Comment updateCommentaire(Comment u);
+    Comment updateCommentaire(Comment cmt,Long cmtid);
     Comment retrieveCommentaire(Long id);
 }

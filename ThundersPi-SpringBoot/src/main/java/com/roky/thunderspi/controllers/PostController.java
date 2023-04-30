@@ -1,13 +1,12 @@
 package com.roky.thunderspi.controllers;
 
 
-import com.roky.thunderspi.entities.LibFile;
+
 import com.roky.thunderspi.entities.Post;
 import com.roky.thunderspi.message.ResponseMessage;
 import com.roky.thunderspi.repositories.*;
 import com.roky.thunderspi.services.BlogPostServiceImpl;
-import com.roky.thunderspi.services.ILibElementService;
-import com.roky.thunderspi.services.LibFileServiceImpl;
+import com.roky.thunderspi.services.IBlogPostService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,52 +22,31 @@ import java.util.List;
 @RequestMapping("/post")
 @AllArgsConstructor
 public class PostController {
-    private BlogPostServiceImpl postService;
     @Autowired
     PostRepo postRepo;
     @Autowired
     CommentRepo commentRepo;
     @Autowired
     UserRepo userRepo;
-
-    private ILibElementService iLibElementService;
-    private LibFileServiceImpl libFileService;
     @Autowired
-    LibElementRepo libElementRepo;
+    IBlogPostService postService;
 
-    @Autowired
-    LibFileRepository libFileRepository;
+   
 
-    @GetMapping("/getAll")
+    @GetMapping("/getAllpost")
     public List<Post> findAllPosts() {
         return postService.findAllPosts();
     }
 
-    @GetMapping("/getAll/{postId}")
-    public Post findCoursesById(@PathVariable Long postId) {
+    @GetMapping("/getpost/{postId}")
+    public Post findPostById(@PathVariable Long postId) {
         return postService.findPostsById(postId);
     }
 
 
-    @PostMapping("/addPos")
-    public ResponseEntity<?> addPost(@RequestParam MultipartFile file, Post post) {
-        String message = "";
-        try {
-
-            libFileService.store(file);
-            String filename = StringUtils.cleanPath(file.getOriginalFilename());
-            LibFile libFile = new LibFile(filename, file.getContentType(), file.getBytes());
-            libFileRepository.save(libFile);
-            post.setFileName(filename);
-            post.setFileType(file.getContentType());
-            post.setIdFile(libFile.getId());
-            message = "Uploaded File successfully: " + file.getOriginalFilename();
-            postRepo.save(post);
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
-        } catch (Exception e) {
-            message = "Could not upload file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
-        }
+   @PostMapping("/addPost")
+     public Post addPost(@RequestBody Post post) {
+      return postService.addPost(post);
 
     }
 
@@ -97,16 +75,13 @@ public class PostController {
 
     }*/
 
-    @PutMapping("/update/{postId}")
-    public Post editCourse(@RequestBody Post post, @PathVariable Long postId) {
-        Post ExistantPost = postRepo.findPostByPostId(postId).orElseThrow(null);
-        ExistantPost.setTitle((post.getTitle()));
-        ExistantPost.setContent(post.getContent());
+    @PutMapping("/updatepost/{postId}")
+    public Post editpost(@RequestBody Post post, @PathVariable Long postId) {
 
-        return postRepo.saveAndFlush(ExistantPost);
+        return postService.editPost(post,postId);
     }
 
-    @DeleteMapping("/delete/{postId}")
+    @DeleteMapping("/deletepost/{postId}")
     public void deleteCourse(@PathVariable Long postId) {
         postService.deletePost(postId);
     }
