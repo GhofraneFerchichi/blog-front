@@ -35,8 +35,10 @@ public class FileStorageService {
 	    fileDBRepo.save(FileDB);
 	    return FileDB.getId();
 	  }
-  public void deletefile(Long idfile) {
+  public void deletefile(Long idfile,Long idAticle) {
 	  FileDB f =fileDBRepo.findById(idfile).orElse(null);
+	  Post t=postrepo.findById(idAticle).orElse(null);
+	  t.setFiles(null);
 	  fileDBRepo.delete(f);
   }
   public FileDB getFile(Long id) {

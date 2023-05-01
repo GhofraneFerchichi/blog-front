@@ -34,14 +34,9 @@ public class Post {
 
 
     private String image;
-    @JsonIgnore
+    
 
-
-    private Instant created_At;
-    @JsonIgnore
-
-
-    private Instant updated_At;
+    private String created_At;
 
     @JsonIgnore
 	  @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)

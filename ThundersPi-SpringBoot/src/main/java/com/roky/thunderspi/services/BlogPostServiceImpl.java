@@ -15,6 +15,8 @@ import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +51,12 @@ public class BlogPostServiceImpl implements IBlogPostService {
 
 	@Override
 	public Post addPost(Post post) {
+		Instant instant = Instant.now(); // Obtenir l'instant actuel
+		ZoneId zoneId = ZoneId.systemDefault(); // Obtenir le fuseau horaire par défaut
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(zoneId); // Créer un formateur de date/heure
+
+		String formattedDate = formatter.format(instant); // Convertir l'instant en une chaîne de caractères formatée
+		post.setCreated_At(formattedDate);
 		return postRepo.save(post);
 	}
 
@@ -56,6 +64,7 @@ public class BlogPostServiceImpl implements IBlogPostService {
 	public Post editPost(Post post,Long postid) {
 		Post p = postRepo.findById(postid).orElse(null);
 		p.setContent(post.getContent());
+		p.setTitle(post.getTitle());
 		return postRepo.save(p);
 	}
 
@@ -78,9 +87,10 @@ public class BlogPostServiceImpl implements IBlogPostService {
 		if (like == null && dislike == null) {
 			likeRepo.save(lk);
 		} else if (like == null && dislike != null) {
+			dislike.setPostdislike(null);
+			dislike.setUtilis(null);
+			dislikeRepo.deleteById(dislike.getIdDisLike());
 			likeRepo.save(lk);
-			publication.getLikes().remove(lk);
-			postRepo.save(publication);
 		} else {
 			likeRepo.delete(like);
 		}
@@ -98,11 +108,12 @@ public class BlogPostServiceImpl implements IBlogPostService {
 		if (like == null && dislike == null) {
 			dislikeRepo.save(lk);
 		} else if (dislike == null && like != null) {
+			like.setPostlike(null);
+			like.setUtilis(null);
+			likeRepo.deleteById(like.getIdLike());
 			dislikeRepo.save(lk);
-			publication.getDislikes().remove(lk);
-			postRepo.save(publication);
 		} else {
-			likeRepo.delete(like);
+			dislikeRepo.delete(dislike);
 		}
 	}
 

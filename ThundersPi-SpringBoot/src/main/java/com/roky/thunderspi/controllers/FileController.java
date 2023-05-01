@@ -65,10 +65,10 @@ public class FileController {
       
    
   }
-  	@DeleteMapping("/delete-file/{id-file}")
+  	@DeleteMapping("/delete-file/{id-file}/{idpost}")
 	@ResponseBody
-	public void deletefile( @PathVariable("id-file") Long idfile){
-		storageService.deletefile(idfile);
+	public void deletefile( @PathVariable("id-file") Long idfile, @PathVariable("idpost") Long idpost){
+		storageService.deletefile(idfile,idpost);
   	}
   @GetMapping("/files")
   public ResponseEntity<List<ResponseFile>> getListFiles() {
@@ -111,7 +111,7 @@ public class FileController {
 
   @PutMapping("/affecter-fileToArticle/{id-post}/{files}")
 	@ResponseBody
-	public void affecterFilesToarticle(@PathVariable("files") Long idfile, @PathVariable("id-Article") Long idArticle) {
+	public void affecterFilesToarticle(@PathVariable("files") Long idfile, @PathVariable("id-post") Long idArticle) {
 	  storageService.affecterFileTopost(idfile, idArticle);
 
 	}
