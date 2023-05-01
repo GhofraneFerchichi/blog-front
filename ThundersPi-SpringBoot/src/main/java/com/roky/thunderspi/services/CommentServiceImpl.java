@@ -2,6 +2,7 @@ package com.roky.thunderspi.services;
 
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,12 @@ public class CommentServiceImpl implements ICommentService{
 	@Override
 	public Comment retrieveCommentaire(Long id) {
 		return cmtRepo.findById(id).orElse(null);
+	}
+
+	@Override
+	public Set<Comment> getcmtbypost(Long idpost) {
+		Post p = postrepo.findById(idpost).orElse(null);
+		return p.getComment();
 	}
 
 	

@@ -46,7 +46,7 @@ public class Post {
     private User user;
 
     @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
-    @JsonIgnore
+    @JsonManagedReference
     Set<Comment> comment;
     
     @OneToMany(mappedBy = "postlike",cascade = CascadeType.REMOVE)

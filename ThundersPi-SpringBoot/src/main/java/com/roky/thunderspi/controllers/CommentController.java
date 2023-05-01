@@ -55,7 +55,12 @@ public class CommentController {
     public Comment retrieveCommentaire(@PathVariable("commentaire-id") Long commentaireId) {
         return cmtservice.retrieveCommentaire(commentaireId);
     }
+    @GetMapping("/getallcmtbypost/{idpost}")
+    @ResponseBody
+    public Set<Comment> getcmtbypost(@PathVariable("idpost") Long postid) {
 
+        return cmtservice.getcmtbypost(postid);
+    }
     @PutMapping("/update-cmt/{commentaire-id}")
     public Comment updateComment(@RequestBody Comment c,@PathVariable("commentaire-id") Long commentaireId) {
 

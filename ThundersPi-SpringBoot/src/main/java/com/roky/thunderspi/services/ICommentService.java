@@ -5,6 +5,7 @@ import com.roky.thunderspi.entities.Post;
 import com.roky.thunderspi.entities.Comment;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ICommentService {
 
@@ -15,4 +16,5 @@ public interface ICommentService {
     void deleteCommentaire(Long id);
     Comment updateCommentaire(Comment cmt,Long cmtid);
     Comment retrieveCommentaire(Long id);
+    Set<Comment> getcmtbypost(Long idpost);
 }

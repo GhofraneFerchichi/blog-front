@@ -22,12 +22,11 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String content;
-    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonBackReference
     Post post;
     @ManyToOne(cascade = CascadeType.DETACH)
-
+    @JsonIgnore
     private User user;
 
     public User getUser() {
