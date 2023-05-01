@@ -10,6 +10,8 @@ import com.roky.thunderspi.repositories.LikeRepository;
 import com.roky.thunderspi.repositories.PostRepo;
 import com.roky.thunderspi.repositories.UserRepo;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-
+@Slf4j
 @Service
 public class BlogPostServiceImpl implements IBlogPostService {
 
@@ -77,11 +79,14 @@ public class BlogPostServiceImpl implements IBlogPostService {
 ///////////// Like & Dislike//////////
 	@Override
 	public void addLike(Long idPublicaiton, Long idUser) {
+		log.info("idPublicaiton"+idPublicaiton+"idUser"+idUser);
 	PostLike lk = new PostLike();
 		Post publication = postRepo.findById(idPublicaiton).orElse(null);
 		User user = utiRepo.findById(idUser).orElse(null);
-		PostLike like = likeRepo.GetLike(idPublicaiton, idUser);
-		PostDislike dislike = dislikeRepo.GetDislike(idPublicaiton, idUser);
+		PostLike like = likeRepo.findByPostlikeAndUtilis(publication, user);
+		log.info("like"+like);
+		PostDislike dislike = dislikeRepo.findByPostdislikeAndUtilis(publication, user);
+		log.info("dislike"+dislike);
 		lk.setPostlike(publication);
 		lk.setUtilis(user);
 		if (like == null && dislike == null) {
@@ -98,11 +103,13 @@ public class BlogPostServiceImpl implements IBlogPostService {
 
 	@Override
 	public void addDislike(Long idPublicaiton, Long idUser) {
-		com.roky.thunderspi.entities.PostDislike lk = new com.roky.thunderspi.entities.PostDislike();
+		PostDislike lk = new PostDislike();
 		Post publication = postRepo.findById(idPublicaiton).orElse(null);
-		com.roky.thunderspi.entities.User user = utiRepo.findById(idUser).orElse(null);
-		PostLike like = likeRepo.GetLike(idPublicaiton, idUser);
-		PostDislike dislike = dislikeRepo.GetDislike(idPublicaiton, idUser);
+		User user = utiRepo.findById(idUser).orElse(null);
+		PostLike like = likeRepo.findByPostlikeAndUtilis(publication, user);
+		log.info("like"+like);
+		PostDislike dislike = dislikeRepo.findByPostdislikeAndUtilis(publication, user);
+		log.info("dislike"+dislike);
 		lk.setPostdislike(publication);
 		lk.setUtilis(user);
 		if (like == null && dislike == null) {
