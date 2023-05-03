@@ -4,25 +4,22 @@ import com.roky.thunderspi.entities.Post;
 import com.roky.thunderspi.entities.PostDislike;
 import com.roky.thunderspi.entities.PostLike;
 import com.roky.thunderspi.entities.User;
-import com.roky.thunderspi.exception.PostNotFoundException;
 import com.roky.thunderspi.repositories.DislikeRepository;
 import com.roky.thunderspi.repositories.LikeRepository;
 import com.roky.thunderspi.repositories.PostRepo;
 import com.roky.thunderspi.repositories.UserRepo;
-
 import lombok.extern.slf4j.Slf4j;
-
+import org.jsoup.Jsoup;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 @Slf4j
 @Service
 public class BlogPostServiceImpl implements IBlogPostService {
@@ -41,14 +38,26 @@ public class BlogPostServiceImpl implements IBlogPostService {
 
 	@Override
 	public List<Post> findAllPosts() {
-		return postRepo.findAll();
+		//List pl = new ArrayList<Post>();
+		//for(Post p :postRepo.findAll() ){
+		//	p.setContent(convert(p.getContent()));
+		//	pl.add(p);
+		//}
+		return postRepo.findAll() ;
 	}
 
-	
+	public static String convert(String html) {
+		Document document = (Document) Jsoup.parse(html);
+		String text = document.text();
+		return text;
+	}
 
 	@Override
 	public Post findPostsById(Long postId) {
-		return postRepo.findById(postId).orElse(null);
+		Post p=postRepo.findById(postId).orElse(null);
+	//	p.setContent(convert(p.getContent()));
+		return p;
+
 	}
 
 	@Override
@@ -67,6 +76,7 @@ public class BlogPostServiceImpl implements IBlogPostService {
 		Post p = postRepo.findById(postid).orElse(null);
 		p.setContent(post.getContent());
 		p.setTitle(post.getTitle());
+
 		return postRepo.save(p);
 	}
 
